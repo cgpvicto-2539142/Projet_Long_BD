@@ -6,6 +6,47 @@
     <title>Liste des livraisons</title>
 </head>
 <body>
-    
+    <table border="1">
+        <thead>
+            <th>Adresse</th>
+            <th>Croute</th>
+            <th>Sauce</th>
+            <th>Garniture(s)</th>
+        </thead>
+        <tbody>
+            {% for ligne in liste %}
+                    {% if ligne.statut != 'livrer' %}
+                <tr>
+                    <td>{{ ligne['adresse'] }}</td>
+                    <td>{{ ligne['croute'] }}</td>
+                    <td>{{ ligne['sauce'] or 'Aucun'}}</td>
+                    <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
+                </tr>
+                
+                    {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <table border="1">
+        <thead>
+            <th>Adresse</th>
+            <th>Croute</th>
+            <th>Sauce</th>
+            <th>Garniture(s)</th>
+        </thead>
+        <tbody>
+            {% for ligne in liste %}
+                    {% if ligne.statut == 'livrer' %}
+                <tr>
+                    <td>{{ ligne['adresse'] }}</td>
+                    <td>{{ ligne['croute'] }}</td>
+                    <td>{{ ligne['sauce'] or 'Aucun'}}</td>
+                    <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
+                </tr>
+                
+                    {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

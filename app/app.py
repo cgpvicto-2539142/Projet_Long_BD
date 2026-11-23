@@ -201,7 +201,7 @@ def validation():
         if connexion:
             connexion.close()
 
-@app.route("/Livrer")
+@app.route("/livrer")
 def liste():
     connexion = mysql.connector.connect(
             host = db_host,
@@ -212,9 +212,18 @@ def liste():
     )
     try:
         cursor = connexion.cursor(dictionary=True)
-        liste_pizza = "SELECT adresse_livraison, croute.nom AS croute, sauce.nom AS sauce, GROUP_CONCAT(garniture.nom) AS garnitures FROM clients LEFT JOIN liste ON liste.id = clients.pizza_id LEFT JOIN croute ON croute.id = liste.croute_id LEFT JOIN sauce ON sauce.id = liste.sauce_id LEFT JOIN pizza_garniture ON pizza_garniture.pizza_id = liste.id LEFT JOIN garniture ON garniture.id = pizza_garniture.garniture_id GROUP BY clients.id, adresse_livraison, croute.nom, sauce.nom;"
+        liste_pizza = "SELECT adresse_livraison AS adresse, statut, croute.nom AS croute, sauce.nom AS sauce, GROUP_CONCAT(garniture.nom) AS garnitures FROM clients LEFT JOIN liste ON liste.id = clients.pizza_id LEFT JOIN croute ON croute.id = liste.croute_id LEFT JOIN sauce ON sauce.id = liste.sauce_id LEFT JOIN pizza_garniture ON pizza_garniture.pizza_id = liste.id LEFT JOIN garniture ON garniture.id = pizza_garniture.garniture_id GROUP BY clients.id, adresse_livraison, croute.nom, sauce.nom;"
         cursor.execute(liste_pizza)
-        liste_pizza_complete
-    return render_template("livrer", )
+        liste_pizza_complete = cursor.fetchall()
+    except mysql.connector.Error as erreur:
+            print(erreur)
+            return "Erreur!"
+    finally:
+            if cursor:
+                cursor.close()
+            if connexion:
+                connexion.close()
+    
+    return render_template("livrer.html", liste=liste_pizza_complete)
 
     
