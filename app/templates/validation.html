@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validation!!!!</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>Croute</th>
+            <th>Sauce</th>
+            <th>Garniture(s)</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+            {% for ligne in pizza %}
+                        {% if ligne.statut != 'livrer' %}
+                <tr>
+                    <td>{{ ligne['croute'] }}</td>
+                    <td>{{ ligne['sauce'] or 'Aucun'}}</td>
+                    <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
+                    <td><button>Confirmer la livraison</button></td>
+                </tr>
+                
+                        {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+</html>

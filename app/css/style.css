@@ -1,0 +1,10 @@
+/* 1. On cache toutes les étapes à partir de la deuxième */
+/*.etape-garniture1 + .etape-garniture2 {
+    display: none;
+}
+
+/* 2. Si une étape n'a PAS "rien" sélectionné, on affiche la suivante */
+/*.etape-garniture1:not(:has(option[value="rien"]:checked)) + .etape-garniture2 {
+    display: block;
+}
+
