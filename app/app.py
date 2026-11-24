@@ -212,7 +212,7 @@ def liste():
     )
     try:
         cursor = connexion.cursor(dictionary=True)
-        liste_pizza = "SELECT adresse_livraison AS adresse, statut, croute.nom AS croute, sauce.nom AS sauce, GROUP_CONCAT(garniture.nom) AS garnitures FROM clients LEFT JOIN liste ON liste.id = clients.pizza_id LEFT JOIN croute ON croute.id = liste.croute_id LEFT JOIN sauce ON sauce.id = liste.sauce_id LEFT JOIN pizza_garniture ON pizza_garniture.pizza_id = liste.id LEFT JOIN garniture ON garniture.id = pizza_garniture.garniture_id GROUP BY clients.id, adresse_livraison, croute.nom, sauce.nom;"
+        liste_pizza = "SELECT adresse_livraison AS adresse, statut, liste.id, croute.nom AS croute, sauce.nom AS sauce, GROUP_CONCAT(garniture.nom) AS garnitures FROM clients LEFT JOIN liste ON liste.id = clients.pizza_id LEFT JOIN croute ON croute.id = liste.croute_id LEFT JOIN sauce ON sauce.id = liste.sauce_id LEFT JOIN pizza_garniture ON pizza_garniture.pizza_id = liste.id LEFT JOIN garniture ON garniture.id = pizza_garniture.garniture_id GROUP BY clients.id, adresse_livraison, croute.nom, sauce.nom;"
         cursor.execute(liste_pizza)
         liste_pizza_complete = cursor.fetchall()
     except mysql.connector.Error as erreur:
@@ -225,5 +225,34 @@ def liste():
                 connexion.close()
     
     return render_template("livrer.html", liste=liste_pizza_complete)
+
+@app.route("/")
+def recharger():
+    connexion = mysql.connector.connect(
+        host = db_host,
+        user = db_user,
+        password = db_password,
+        database = db_name,
+        port = db_port
+    )
+    try:
+        cursor = connexion.cursor(dictionary=True)
+        id = request.form['id']
+        livrer = "UPDATE liste SET statut = 'livrer' WHERE id = %(_id)s"
+        parametres = {
+            '_id': id
+        }
+        cursor.execute(livrer, parametres)
+    except mysql.connector.Error as erreur:
+                print(erreur)
+                return "Erreur!"
+    finally:
+        if cursor:
+            cursor.close()
+        if connexion:
+            connexion.close()
+    return redirect(url_for("/livrer"))
+
+    
 
     

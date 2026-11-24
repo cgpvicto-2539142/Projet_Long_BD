@@ -19,11 +19,12 @@
             {% for ligne in liste %}
                     {% if ligne.statut != 'livrer' %}
                 <tr>
-                    <td>{{ ligne['adresse'] }}</td>
-                    <td>{{ ligne['croute'] }}</td>
-                    <td>{{ ligne['sauce'] or 'Aucun'}}</td>
-                    <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
-                    <td><a href="/recharge"></a> </td>
+                    <form action="/recharger"></form>
+                        <td>{{ ligne['adresse'] }}</td>
+                        <td>{{ ligne['croute'] }}</td>
+                        <td>{{ ligne['sauce'] or 'Aucun'}}</td>
+                        <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
+                        <td><a href="/livrer"><button>Livrer</button></a></td>
                 </tr>
                 
                     {% endif %}
@@ -33,6 +34,7 @@
     <h2>En livraison/livré:</h2>
     <table border="1">
         <thead>
+            <th>Numéro de pizza</th>
             <th>Adresse</th>
             <th>Croute</th>
             <th>Sauce</th>
@@ -42,10 +44,14 @@
             {% for ligne in liste %}
                     {% if ligne.statut == 'livrer' %}
                 <tr>
-                    <td>{{ ligne['adresse'] }}</td>
-                    <td>{{ ligne['croute'] }}</td>
-                    <td>{{ ligne['sauce'] or 'Aucun'}}</td>
-                    <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
+                    <form action="/recharger">
+                        <td value="id">{{ ligne['id'] }}</td>
+                        <td value="adresse">{{ ligne['adresse'] }}</td>
+                        <td value="croute">{{ ligne['croute'] }}</td>
+                        <td>{{ ligne['sauce'] or 'Aucun'}}</td>
+                        <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
+                      
+                    
                 </tr>
                 
                     {% endif %}
