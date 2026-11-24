@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import mysql.connector
 import os 
 from dotenv import load_dotenv
@@ -226,8 +226,9 @@ def liste():
     
     return render_template("livrer.html", liste=liste_pizza_complete)
 
-@app.route("/")
+@app.route("/recharger", methods=["POST"])
 def recharger():
+    print("fonction recharge!")
     connexion = mysql.connector.connect(
         host = db_host,
         user = db_user,
@@ -237,12 +238,13 @@ def recharger():
     )
     try:
         cursor = connexion.cursor(dictionary=True)
-        id = request.form['id']
+        id = request.form.get('id')
         livrer = "UPDATE liste SET statut = 'livrer' WHERE id = %(_id)s"
         parametres = {
             '_id': id
         }
         cursor.execute(livrer, parametres)
+        connexion.commit()
     except mysql.connector.Error as erreur:
                 print(erreur)
                 return "Erreur!"
@@ -251,7 +253,7 @@ def recharger():
             cursor.close()
         if connexion:
             connexion.close()
-    return redirect(url_for("/livrer"))
+    return redirect("/livrer")
 
     
 

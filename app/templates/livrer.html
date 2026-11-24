@@ -10,6 +10,7 @@
     <h2>En attente:</h2>
     <table border="1">
         <thead>
+            <th>Numéro de la pizza</th>
             <th>Adresse</th>
             <th>Croute</th>
             <th>Sauce</th>
@@ -19,12 +20,14 @@
             {% for ligne in liste %}
                     {% if ligne.statut != 'livrer' %}
                 <tr>
-                    <form action="/recharger"></form>
+                    <form action="/recharger" method="post">
+                        <td value="id">{{ ligne['id'] }}</td>
                         <td>{{ ligne['adresse'] }}</td>
                         <td>{{ ligne['croute'] }}</td>
                         <td>{{ ligne['sauce'] or 'Aucun'}}</td>
                         <td>{{ ligne['garnitures'] or 'Aucun'}}</td>
-                        <td><a href="/livrer"><button>Livrer</button></a></td>
+                        <td><button type="submit" name="id" value="{{ ligne['id'] }}">Livrer</button></td>
+                    </form>
                 </tr>
                 
                     {% endif %}
@@ -44,7 +47,6 @@
             {% for ligne in liste %}
                     {% if ligne.statut == 'livrer' %}
                 <tr>
-                    <form action="/recharger">
                         <td value="id">{{ ligne['id'] }}</td>
                         <td value="adresse">{{ ligne['adresse'] }}</td>
                         <td value="croute">{{ ligne['croute'] }}</td>
